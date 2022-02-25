@@ -6,11 +6,15 @@ const cors = require("cors");
 const morgan = require("morgan");
 require("dotenv").config();
 require("../api/config/db");
+const userRouter = require("./app/routes/auth");
 
 const app = express();
 const port = process.env.PORT || 8000;
 
+app.use(express.json());
+
 // middlewares
+app.use(userRouter);
 
 app.use(morgan("dev"));
 app.use(bodyParser.json());
@@ -22,10 +26,6 @@ if (process.env.NODE_ENV === "development") {
 }
 
 // route
-
-app.get("/", (req, res) => {
-  res.json({ time: Date().toString() });
-});
 
 app.listen(port, () => {
   console.log(`app listening on port ${port}`);
