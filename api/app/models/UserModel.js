@@ -63,22 +63,32 @@ const User = mongoose.model(
  *
  */
 
-User.virtual("password")
-  // hashed password
+// User.schema.pre("password", async function (next) {
+//   try {
+//     const salt = await bcrypt.genSalt(10);
+//     const hashed_password = await bcrypt.hash(this.password, salt);
+//     this.password = hashed_password;
+//     next();
+//   } catch (error) {
+//     next(error);
+//   }
+// });
+
+User.schema
+  .virtual("password")
   .set(function (password) {
-    // membuat variabel temporarity _password
+    // create a temporarity variable called _password
     this._password = password;
     // generate salt
     this.salt = this.makeSalt();
-    // meng encrypt password
+    // encryptPassword
     this.hashed_password = this.encryptPassword(password);
   })
   .get(function () {
     return this._password;
   });
 
-User.methods = {
-  // compaile password
+User.schema.methods = {
   authenticate: function (plainText) {
     return this.encryptPassword(plainText) === this.hashed_password;
   },
@@ -90,12 +100,11 @@ User.methods = {
         .createHmac("sha1", this.salt)
         .update(password)
         .digest("hex");
-    } catch (error) {
+    } catch (err) {
       return "";
     }
   },
 
-  // generate password
   makeSalt: function () {
     return Math.round(new Date().valueOf() * Math.random()) + "";
   },
