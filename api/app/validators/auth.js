@@ -15,3 +15,12 @@ exports.userSignupValidator = [
     // akan menampilkan pesan
     .withMessage("Password must be at least 6 characters long"),
 ];
+
+exports.userSigninValidator = [
+  check("email").isEmail().withMessage("Must Be a valid email address"),
+  check("password")
+    // jika password kurang dari 6
+    .isLength({ min: 6 })
+    // akan menampilkan pesan
+    .withMessage("Password must be at least 6 characters long"),
+];

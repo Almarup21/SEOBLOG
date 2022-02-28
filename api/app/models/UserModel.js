@@ -140,6 +140,7 @@ userSchema
   });
 
 userSchema.methods = {
+  // match password
   authenticate: function (plainText) {
     return this.encryptPassword(plainText) === this.hashed_password;
   },
