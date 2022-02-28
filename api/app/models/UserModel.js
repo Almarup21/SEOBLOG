@@ -1,67 +1,117 @@
 const mongoose = require("mongoose");
 const crypto = require("crypto");
 
-const User = mongoose.model(
-  "users",
-  mongoose.Schema(
-    {
-      username: {
-        type: String,
-        trim: true,
-        required: true,
-        max: 32,
-        unique: true,
-        index: true,
-        lowercase: true,
-      },
-      name: {
-        type: String,
-        trim: true,
-        required: true,
-        max: 32,
-        lowercase: true,
-      },
-      email: {
-        type: String,
-        trim: true,
-        required: true,
-        unique: true,
-        lowercase: true,
-      },
-      profile: {
-        type: String,
-        required: true,
-      },
-      hashed_password: {
-        type: String,
-        required: true,
-      },
-      salt: String,
-      about: {
-        type: String,
-      },
-      role: {
-        type: Number,
-        trim: true,
-      },
-      photo: {
-        data: Buffer,
-        contentType: String,
-      },
-      resetPasswordLink: {
-        data: String,
-        default: "",
-      },
+// ternayata harus begini
+
+const userSchema = new mongoose.Schema(
+  {
+    username: {
+      type: String,
+      trim: true,
+      required: true,
+      max: 32,
+      unique: true,
+      index: true,
+      lowercase: true,
     },
-    { timestamps: true }
-  )
+    name: {
+      type: String,
+      trim: true,
+      required: true,
+      max: 32,
+    },
+    email: {
+      type: String,
+      trim: true,
+      required: true,
+      unique: true,
+      lowercase: true,
+    },
+    profile: {
+      type: String,
+      required: true,
+    },
+    hashed_password: {
+      type: String,
+      required: true,
+    },
+    salt: String,
+    about: {
+      type: String,
+    },
+    role: {
+      type: Number,
+      trim: true,
+    },
+    photo: {
+      data: Buffer,
+      contentType: String,
+    },
+    resetPasswordLink: {
+      data: String,
+      default: "",
+    },
+  },
+  { timestamp: true }
 );
 
-/**
- * ! error virtual bukan sebuah function
- * TODO Memperbaiki
- *
- */
+// tidak bisa begini
+
+// const User = mongoose.model(
+//   "users",
+//   mongoose.Schema(
+//     {
+//       username: {
+//         type: String,
+//         trim: true,
+//         required: true,
+//         max: 32,
+//         unique: true,
+//         index: true,
+//         lowercase: true,
+//       },
+//       name: {
+//         type: String,
+//         trim: true,
+//         required: true,
+//         max: 32,
+//         lowercase: true,
+//       },
+//       email: {
+//         type: String,
+//         trim: true,
+//         required: true,
+//         unique: true,
+//         lowercase: true,
+//       },
+//       profile: {
+//         type: String,
+//         required: true,
+//       },
+//       hashed_password: {
+//         type: String,
+//         required: true,
+//       },
+//       salt: String,
+//       about: {
+//         type: String,
+//       },
+//       role: {
+//         type: Number,
+//         trim: true,
+//       },
+//       photo: {
+//         data: Buffer,
+//         contentType: String,
+//       },
+//       resetPasswordLink: {
+//         data: String,
+//         default: "",
+//       },
+//     },
+//     { timestamps: true }
+//   )
+// );
 
 // User.schema.pre("password", async function (next) {
 //   try {
@@ -74,13 +124,14 @@ const User = mongoose.model(
 //   }
 // });
 
-User.schema
+userSchema
   .virtual("password")
   .set(function (password) {
     // create a temporarity variable called _password
     this._password = password;
     // generate salt
     this.salt = this.makeSalt();
+    console.log(this.salt);
     // encryptPassword
     this.hashed_password = this.encryptPassword(password);
   })
@@ -88,7 +139,7 @@ User.schema
     return this._password;
   });
 
-User.schema.methods = {
+userSchema.methods = {
   authenticate: function (plainText) {
     return this.encryptPassword(plainText) === this.hashed_password;
   },
@@ -110,4 +161,4 @@ User.schema.methods = {
   },
 };
 
-module.exports = User;
+module.exports = mongoose.model("Users", userSchema);
