@@ -32,16 +32,20 @@ function Header() {
           <NavbarToggler onClick={toggle} />
           <Collapse isOpen={isOpen} navbar>
             <Nav className="ml-auto" navbar>
-              <NavItem>
-                <NavLink href="/signin">Signin</NavLink>
-              </NavItem>
-              <NavItem>
-                <Link href="/signup">
-                  <NavLink>
-                    <a>Signup</a>
-                  </NavLink>
-                </Link>
-              </NavItem>
+              {!isAuth() && (
+                <React.Fragment>
+                  <NavItem>
+                    <NavLink href="/signin">Signin</NavLink>
+                  </NavItem>
+                  <NavItem>
+                    <Link href="/signup">
+                      <NavLink>
+                        <a>Signup</a>
+                      </NavLink>
+                    </Link>
+                  </NavItem>
+                </React.Fragment>
+              )}
               {isAuth() && (
                 <NavItem>
                   <NavLink
