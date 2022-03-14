@@ -3,7 +3,7 @@ const shortId = require("shortid");
 const jwt = require("jsonwebtoken");
 const expressJWT = require("express-jwt");
 
-exports.signup = async (req, res) => {
+exports.signup = (req, res) => {
   // console.log(req.body);
   User.findOne({ email: req.body.email }).exec((err, user) => {
     if (user) {

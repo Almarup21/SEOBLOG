@@ -2,7 +2,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
-const cors = require("cors");
+const Cors = require("cors");
 const morgan = require("morgan");
 require("dotenv").config();
 require("../api/config/db");
@@ -10,6 +10,12 @@ const userRouter = require("./app/routes/auth");
 
 const app = express();
 const port = process.env.PORT || 8000;
+
+// cors
+// app.use(Cors());
+if (process.env.NODE_ENV === "development") {
+  app.use(Cors({ origin: `${process.env.CLIENT_URL}` }));
+}
 
 app.use(express.json());
 
@@ -20,13 +26,12 @@ app.use(morgan("dev"));
 app.use(bodyParser.json());
 app.use(cookieParser());
 
-// cors
-if (process.env.NODE_ENV === "development") {
-  app.use(cors({ origin: `${process.env.CLIENT_URL}` }));
-}
-
 // route
 
+app.get("/", (req, res) => {
+  res.send("hello world");
+});
+
 app.listen(port, () => {
-  console.log(`app listening on port ${port}`);
+  console.log(`app listening on port http://localhost:${port}`);
 });
