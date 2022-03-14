@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import Link from "next/Link";
 import { APP_NAME } from "../config";
+import { signout, isAuth } from "../action/auth";
+import Router from "next/router";
 import {
   Collapse,
   Navbar,
@@ -40,6 +42,15 @@ function Header() {
                   </NavLink>
                 </Link>
               </NavItem>
+              {isAuth() && (
+                <NavItem>
+                  <NavLink
+                    onClick={() => signout(() => Router.replace("/signin"))}
+                  >
+                    <a>Signout</a>
+                  </NavLink>
+                </NavItem>
+              )}
             </Nav>
           </Collapse>
         </div>
