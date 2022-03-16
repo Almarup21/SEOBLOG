@@ -6,7 +6,8 @@ const Cors = require("cors");
 const morgan = require("morgan");
 require("dotenv").config();
 require("../api/config/db");
-const userRouter = require("./app/routes/auth");
+const authRouter = require("./app/routes/auth");
+const userRouter = require("./app/routes/user");
 
 const app = express();
 const port = process.env.PORT || 8000;
@@ -20,6 +21,7 @@ if (process.env.NODE_ENV === "development") {
 app.use(express.json());
 
 // middlewares
+app.use(authRouter);
 app.use(userRouter);
 
 app.use(morgan("dev"));

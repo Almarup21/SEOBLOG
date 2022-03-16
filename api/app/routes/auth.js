@@ -16,7 +16,7 @@ router.get("/signout", User.signout);
 //  test
 router.get("/secret", User.requireSignin, (req, res) => {
   res.json({
-    message: "you have access secret page",
+    User: req.user,
   });
 });
 

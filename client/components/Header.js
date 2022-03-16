@@ -46,14 +46,32 @@ function Header() {
                   </NavItem>
                 </React.Fragment>
               )}
-              {isAuth() && (
+
+              {isAuth() && isAuth().role === 1 && (
                 <NavItem>
-                  <NavLink
-                    onClick={() => signout(() => Router.replace("/signin"))}
-                  >
-                    <a>Signout</a>
+                  <NavLink href="/admin">
+                    <a>Admin</a>
                   </NavLink>
                 </NavItem>
+              )}
+
+              {isAuth() && (
+                <div>
+                  <NavItem>
+                    <NavLink
+                      onClick={() => signout(() => Router.replace("/signin"))}
+                    >
+                      <a>Signout</a>
+                    </NavLink>
+                  </NavItem>
+                  <NavItem>
+                    <Link href="/user/profile">
+                      <NavLink>
+                        <a>Profile</a>
+                      </NavLink>
+                    </Link>
+                  </NavItem>
+                </div>
               )}
             </Nav>
           </Collapse>
