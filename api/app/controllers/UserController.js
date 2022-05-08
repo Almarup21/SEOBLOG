@@ -51,6 +51,7 @@ exports.signin = async (req, res) => {
     }
 
     // authenticate
+    // apakah password sama ?
     if (!user.authenticate(password)) {
       res.status(400).json({
         error: "Email and password do not match",
@@ -88,7 +89,9 @@ exports.authMiddleware = (req, res, next) => {
   const authUserId = req.user._id;
   User.findById({ _id: authUserId }).exec((err, user) => {
     if (err || !user) {
-      return res.status(400).json({ error: "User not Found" });
+      return res.status(400).json({
+        error: "User not found",
+      });
     }
     req.profile = user;
     next();
@@ -96,17 +99,24 @@ exports.authMiddleware = (req, res, next) => {
 };
 
 exports.adminMiddleware = (req, res, next) => {
-  const authUserId = req.user._id;
-  User.findById({ _id: authUserId }).exec((err, user) => {
-    if (err || !user) {
-      return res.status(400).json({ error: "User not Found" });
-    }
+  const adminUserId = req.user._id;
+  if(adminUserId === undefined){
 
-    if (user.role !== 1) {
-      return res.status(400).json({ error: "Admin resource. Access Denied" });
-    }
-
-    req.profile = user;
-    next();
-  });
+    return User.findById({ _id: adminUserId }).exec((err, user) => {
+      if (err || !user) {
+        return res.status(400).json({
+          error: "User not found",
+        });
+      }
+  
+      if (user.role !== 1) {
+        return res.status(400).json({
+          error: "Admin resource. Access denied",
+        });
+      }
+  
+      req.profile = user;
+      next();
+    });
+  }
 };

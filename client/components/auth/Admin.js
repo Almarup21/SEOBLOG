@@ -10,6 +10,7 @@ function Admin({ children }) {
       Router.push(`/`);
     }
   });
+  // console.log(isAuth());
   return <React.Fragment>{children}</React.Fragment>;
 }
 

@@ -1,6 +1,7 @@
 const {
   requireSignin,
   authMiddleware,
+  adminMiddleware,
   read,
 } = require("../controllers/UserController");
 
